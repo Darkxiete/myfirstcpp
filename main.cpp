@@ -569,9 +569,9 @@ int t_5_9() {
 //        cin >> nums[0];
 //        cout << "Enter a Number" << endl;
 //        cin >> nums[1];
-        for (auto &x: nums){
+        for (auto &x: nums) {
             cout << "Enter a Number" << endl;
-            while (!(cin >> x)){
+            while (!(cin >> x)) {
                 cin.clear();
                 while (cin.get() != '\n')
                     continue;
@@ -735,10 +735,10 @@ int f_6_14() {
     cout << "Please enter your golf scores.\n";
     cout << "You must enter " << MAX << " rounds.\n";
     int i;
-    for (i = 0; i < MAX; ++i){
+    for (i = 0; i < MAX; ++i) {
         cout << "round #" << i + 1 << ": ";
         // TODO cin是有返回值的，输入成功返回1，输出失败返回0
-        while (!(cin >> golf[i])){
+        while (!(cin >> golf[i])) {
             cin.clear();
             while (cin.get() != '\n')
                 continue;
@@ -746,7 +746,7 @@ int f_6_14() {
         }
     }
     double total = 0.0;
-    for (auto x: golf){
+    for (auto x: golf) {
         total += x;
     }
     cout << total / MAX << " = average score " << MAX << " rounds\n";
@@ -797,10 +797,10 @@ int f_6_16() {
     int value;
     // TODO 无法打开，为什么？
     inFile.open(filename);
-    if (!inFile.is_open()){
+    if (!inFile.is_open()) {
         cout << "Can't open this file: " << filename << endl;
     }
-    while (inFile >> value){
+    while (inFile >> value) {
         cout << "value: " << value << endl;
     }
     inFile.close();
@@ -813,7 +813,74 @@ int f_6_16() {
     return 0;
 }
 
+int f_7_5() {
+    const int ArSize = 5;
+
+    auto sum_arr = [](int arr[], int n) {
+        int total = 0;
+        for (int i = 0; i < n; ++i)
+            total += arr[i];
+        return total;
+    };
+    int cookies[ArSize] = {1, 2, 3, 4, 5};
+    int sum = sum_arr(cookies, ArSize);
+    cout << "Total cookies eaten: " << sum << "\n";
+    return 0;
+}
+
+int f_7_8() {
+    const int ArSize = 5;
+
+    auto sum_arr = [](const int *begin, const int *end) {
+        int total = 0;
+        // 使用const申明指针表明无法*使用该指针*修改数据
+        for (const int *pt = begin; pt != end; ++pt)
+            total += *pt;
+        return total;
+    };
+    int cookies[ArSize] = {1, 2, 3, 4, 5};
+    int sum = sum_arr(cookies, cookies + ArSize);
+    cout << "Total cookies eaten: " << sum << endl;
+    return 0;
+}
+
+int f_7_8_1() {
+    const int months[5] = {1, 2, 3, 4, 5};
+    auto sum = [](int arr[], int n) {
+        int total = 0;
+        for (int i = 0; i < n; ++i) {
+            total += arr[i];
+        }
+        return total;
+    };
+    // 报错，不能将 const int* 变成 int*
+//    int j = sum(months, 5);
+}
+
+int f_7_8_2() {
+    /*
+     * 0xC0000005 错误，声明指针的时候一定要初始化指针
+     */
+    int **pp2 = nullptr;
+    int n = 13;
+    int m = 1;
+//    int *p1 = &n; // 不可以
+    int *p1 = &m;
+    pp2 = &p1;
+//    *pp2 = p1; // pp2可能是空指针
+
+
+
+
+//    pp2 = &p1; //不行的
+//    *pp2 = &n;
+    *p1 = n;
+//    *p1 += 1;
+    cout << "pp2 value: " << pp2 << " " << "p1 address: " << &p1 << endl;
+    return 0;
+}
+
 int main() {
-    f_6_16();
+    f_7_8_2();
     return 0;
 }
