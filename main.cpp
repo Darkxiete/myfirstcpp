@@ -4,7 +4,8 @@
 #include <vector>
 #include <array>
 #include <cctype>
-#include<direct.h>
+#include <dirent.h>
+#include <cmath>
 
 using namespace std;
 
@@ -306,7 +307,7 @@ int t_4_12() {
     const int length17 = 10;
     vector<string> a17[length17];
     array<string, length17> b17;
-
+    return 0;
 
 }
 
@@ -431,6 +432,7 @@ int f_5_9() {
         word[j] = tmp;
     }
     cout << word << endl;
+    return 0;
 }
 
 int f_5_19() {
@@ -494,6 +496,7 @@ int f_5_20() {
     int x = 1;
     f(x);
     cout << x << endl;
+    return 0;
 }
 
 int t_5_8() {
@@ -855,6 +858,7 @@ int f_7_8_1() {
     };
     // 报错，不能将 const int* 变成 int*
 //    int j = sum(months, 5);
+    return 0;
 }
 
 int f_7_8_2() {
@@ -880,7 +884,167 @@ int f_7_8_2() {
     return 0;
 }
 
+int f_7_10() {
+    auto return_str = [](char ch, int n) {
+        char *pstr = new char[n + 1];
+        pstr[n] = '\0';
+        while (n-- > 0) {
+            pstr[n] = ch;
+        }
+        return pstr;
+    };
+    string s = return_str('A', 10);
+    cout << s << endl;
+    return 0;
+}
+
+int f_7_11() {
+    struct travel_time {
+        int hours;
+        int mins;
+    };
+    const int Mins_per_hr = 60;
+
+    auto sum = [](travel_time t1, travel_time t2) {
+        travel_time total;
+
+        total.mins = t1.mins + t2.mins + (t1.mins + t2.mins) % Mins_per_hr;
+        total.hours = t1.hours + t2.hours + (t1.hours + t2.hours) / Mins_per_hr;
+        return total;
+    };
+    auto show_time = [](travel_time t) {
+        cout << t.hours << " hours, "
+             << t.mins << " mins." << endl;
+    };
+    travel_time t1 = {5, 45};
+    travel_time t2 = {4, 24};
+
+    travel_time trip = sum(t1, t2);
+    show_time(trip);
+    cout << "t1.hour address: " << &t1.hours << endl;
+    cout << "t1.mins address: " << &t1.mins << endl;
+    return 0;
+}
+
+int f_7_12() {
+
+    struct rect {
+        double x;
+        double y;
+    };
+    struct polar {
+        double distance;
+        double angle;
+    };
+    auto rect_to_polar = [](rect xypos) {
+        polar answer;
+        answer.distance = sqrt(xypos.x * xypos.x + xypos.y * xypos.y);
+        answer.angle = atan2(xypos.y, xypos.x);
+        return answer;
+    };
+    auto show_polar = [](polar dapos) {
+        const double Rad_to_deg = 57.295775951;
+        cout << "distance = " << dapos.distance << ", "
+             << "angle = " << dapos.angle << dapos.angle * Rad_to_deg
+             << " degree" << endl;
+    };
+
+    rect rpalce;
+    polar pplace;
+
+    cout << "Enter the x and y:";
+    while (cin >> rpalce.x >> rpalce.y) {
+        pplace = rect_to_polar(rpalce);
+        show_polar(pplace);
+        cout << "Next two numbers (q to quit): ";
+    }
+    cout << "Done" << endl;
+    return 0;
+}
+
+int f_7_13() {
+
+    struct rect {
+        double x;
+        double y;
+    };
+    struct polar {
+        double distance;
+        double angle;
+    };
+    auto rect_to_polar = [](rect *pxy, polar *pda) {
+        pda->distance = sqrt(pxy->x * pxy->x + pxy->y * pxy->y);
+        pda->angle = atan2(pxy->y, pxy->x);
+    };
+    auto show_polar = [](polar *pda) {
+        const double Rad_to_deg = 57.295775951;
+        cout << "distance = " << pda->distance << ", "
+             << "angle = " << pda->angle << pda->angle * Rad_to_deg
+             << " degree" << endl;
+    };
+
+    rect rpalce;
+    polar pplace;
+
+    cout << "Enter the x and y:";
+    while (cin >> rpalce.x >> rpalce.y) {
+        rect_to_polar(&rpalce, &pplace);
+        show_polar(&pplace);
+        cout << "Next two numbers (q to quit): ";
+    }
+    cout << "Done" << endl;
+    return 0;
+}
+
+int f_7_15() {
+    const int Seasons = 4;
+    // lambda 函数里似乎是无法读取到这个const array
+    // 如果想让lambda函数获取（capture）到外部变量，需要放在[]里
+    const array<string, Seasons> Snames = {
+            "Spring", "Summer", "Fall", "Winter"
+    };
+    auto fill = [Snames](array<double, Seasons> *pa) {
+        for (int i = 0; i < Seasons; ++i) {
+            cout << "Enter " << Snames[i] << " expenses: ";
+            cin >> (*pa)[i];
+        }
+    };
+    auto show = [Snames](array<double, Seasons> *pa) {
+        for (int i = 0; i < Seasons; ++i) {
+            cout << Snames[i] << ": " << (*pa)[i] << endl;
+        }
+    };
+
+    array<double, Seasons> expenses;
+    fill(&expenses);
+    show(&expenses);
+    return 0;
+
+}
+
+int f_7_18() {
+    auto estimate = [](int lines, double (*pf)(int)) {
+        cout << lines << " lines will tale ";
+        cout << (*pf)(lines) << " hour(s)\n";
+    };
+    auto betsy = [](int lines) {
+        return 0.05 * lines;
+    };
+    auto pam = [](int lines) {
+        return 0.03 *lines + 0.0004 * lines * lines;
+    };
+
+    int code;
+    cout << "How many lines of code do you need? ";
+    cin >> code;
+    cout << "Here's Betsy's estimate: " << endl;
+    estimate(code, betsy);
+    cout << "Here's Pam's estimate: " << endl;
+    estimate(code, pam);
+    return 0;
+}
+
 int main() {
-    f_7_8_2();
+    f_7_18();
     return 0;
 }
