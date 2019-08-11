@@ -1044,7 +1044,119 @@ int f_7_18() {
     return 0;
 }
 
+int t_7_13() {
+    // 1
+    auto f_1 = [](){
+        float x, y, ret;
+        while (true){
+            cout << "Enter two number: ";
+            cin >> x >> y;
+            if (x == 0 or y == 0){
+                cout << "Quit!" << endl;
+                break;
+            }
+            ret = 2.0 * x * y / (x + y);
+            cout << "Result: " << ret << endl;
+        }
+    };
+    // 2
+    auto f_2 = []() {
+        const int size = 10;
+        auto f_2_1 = [](float ar[], int lens) {
+            for (int i = 0; i < 10; ++i){
+                cout << "Enter your scores " << i + 1 << " (q to quit).";
+                if (!(cin >> ar[i]))
+                    break;
+            }
+        };
+        auto f_2_2 = [](float ar[], int lens) {
+            for (int i = 0; i < lens; ++i)
+                cout << ar[i] << " ";
+            cout << endl;
+        };
+        auto f_2_3 = [](float ar[], int lens) {
+            float sum = 0;
+            for (int i = 0; i < lens; ++i)
+                sum += ar[i];
+            cout << "Sum: " << sum << endl;
+        };
+
+        float arr[size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        f_2_1(arr, size);
+        f_2_2(arr, size);
+        f_2_3(arr, size);
+
+
+    };
+    // 3
+    struct box {
+        char maker[40];
+        float height;
+        float width;
+        float length;
+        float volume;
+    };
+    auto f_3 = []() {
+        auto f_3_a = [](box b) {
+            cout << "maker: " << b.maker << '\n';
+            cout << "width: " << b.width << '\n';
+            cout << "length: " << b.length << '\n';
+            cout << "volume: " << b.volume << '\n';
+        };
+        auto f_3_b = [](box *b) {
+            float volume = b->width * b->height * b->length;
+            b->volume = volume;
+            cout << "volume: " << b->volume << endl;
+        };
+
+        box b = {
+                "Hello", 1.0, 2.0 , 3.0 , 4.0
+        };
+        f_3_a(b);
+        f_3_b(&b);
+    };
+    // 4
+    auto f_4 = []() {
+        auto probability = [](unsigned numbers, unsigned picks) {
+            long double result = 1.0;
+            unsigned int n, p;
+            for (n = numbers, p = picks; p > 0; --p, --n)
+                result *= n / p;
+            return result;
+        };
+
+        unsigned total, choices, special;
+        cout << "Enter three number:\n";
+        while (cin >> total >> choices >> special && total >=choices && special > 0){
+            long double p1 = probability(total, choices);
+            long double p2 = probability(special, 1);
+            long double result = 1 / (p1 * p2);
+            cout << "Result: " << result << endl;
+            cout << "Enter three number(q to quit):\n ";
+        }
+    };
+    auto f_5 = []() {
+        unsigned  n;
+        cout << "Enter a number: \n";
+        cin >> n;
+        // TODO 在递归中使用lambda函数
+        function<unsigned(unsigned)> rec_1;
+        rec_1 = [&](unsigned number) -> unsigned {
+            if (number == 0)
+                return 1;
+            return number * rec_1(number - 1);
+        };
+
+        auto rec_2 = [&](unsigned number) -> unsigned {
+            if (number == 0)
+                return 1;
+            return number * rec_2(number - 1); // 错误
+        };
+        cout << rec_2(n) << endl;
+    };
+    f_5();
+}
+
 int main() {
-    f_7_18();
-    return 0;
+    t_7_13();
 }
